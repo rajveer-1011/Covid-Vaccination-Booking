@@ -1,0 +1,46 @@
+{% extends "base.html" %} 
+  {% block title %}
+    Search result
+  {% endblock %} 
+
+  {% block header %}
+    Vaccination centers availabel
+  {% endblock %}
+
+  {% block headercontent %}
+    Search result of "{{keyword}}"
+  {% endblock %}
+
+
+{% block content %} 
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+  {% for center in squery %}
+
+  <div class="col">
+    <div class="card mb-4 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">{{center.name}}</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">1 <small class="text-body-secondary fw-light">dose left</small></h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Location: {{center.location}}</li>
+          <li>Working hours: {{center.working_hours}}</li>
+          <li>Dosage details : {{center.dosage}}</li>        
+        </ul>
+        
+        <div class="d-grid d-md-flex justify-content-md-end">
+          {% if center.slots_booked>0 %}
+            <a class="btn btn-success me-md-1" href="/book/center/{{center.id}}">Book slot</a>
+            {% else %}
+            <button class="btn btn-outline-danger me-md-1" href="/book/center/{{center.id}}"  disabled>Book slot</button>
+            {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

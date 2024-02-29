@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}
+Home
+{% endblock %}
+
+{% block header %}
+Vaccination centers
+{% endblock %}
+
+{% block headercontent %}
+{% if user.role == 'admin' %}
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Add vaccine center
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Add vaccination center</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <form action=" /add/center" method="POST">
+            <input type="text" class="form-control mb-2" placeholder="Enter name of center" name="centername">
+            <input type="text" class="form-control mb-2" placeholder="Enter location of center" name="location">
+            <input type="text" class="form-control mb-2" placeholder="Enter working hours of center"
+              name="workinghours">
+            <input type="number" class="form-control mb-2" placeholder="Enter vaccine dosage" name="dosage">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% else %}
+
+{% endif %}
+
+{% endblock %}
+
+
+{% block content%}
+{% if user.role == 'admin' %}
+<div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+  {% for center in centers %}
+
+  <div class="col">
+    <div class="card mb-4 rounded-3 shadow-sm">
+      <div class="card-header py-3">
+        <h4 class="my-0 fw-normal">{{center.name}}</h4>
+      </div>
+      <div class="card-body">
+        <h1 class="card-title pricing-card-title">{{center.dosage}} <small class="text-body-secondary fw-light">dose
+            left</small></h1>
+        <ul class="list-unstyled mt-3 mb-4">
+          <li>Location: {{center.location}}</li>
+          <li>Dosage details: {{center.dosage}}</li>
+          <li>Working hours: {{center.working_hours}}</li>
+          <li>Slots booked: {{center.slots_booked}}</li>
+        </ul>
+
+        <div class="d-grid d-md-flex justify-content-md-end">
+          <a class="btn btn-danger me-md-1" href="/delete/center/{{center.id}}">delete</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+{% else %}
+<form action="/search/result" method="POST">
+  <div class="d-grid gap-2 col-6 mx-auto">
+    <input type="text" class="form-control"
+      placeholder="Search for vaccination centers by name, working hours, location" name="search" />
+    <button class="btn btn-primary" type="submit">Search</button>
+  </div>
+</form>
+
+<h2 class="display-6 text-center mb-4 mt-5 border-top">Your Bookings {{user.name}} </h2>
+
+<div class="table-responsive">
+  <table class="table text-center">
+    <thead>
+      <tr>
+        <th style="width: 22%;">Date of booking</th>
+        <th style="width: 34%;">Center name</th>
+        <th style="width: 22%;">Center location</th>
+        <th style="width: 22%;">Center working hrs</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <th scope="row">{{booking.booking_date}}</th>
+        <td>{{booking.center.name}}</td>
+        <td>{{booking.center.location}}</td>
+        <td>{{booking.center.working_hours}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+
+  </table>
+</div>
+{% endif %}
+
+{% endblock %}
