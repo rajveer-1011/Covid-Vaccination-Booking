@@ -1,6 +1,8 @@
 # Covid-Vaccination-Booking
 A web application for covid vaccination booking with a basic UI.
 
+### [Deployed on render] https://covid-vaccination-booking-0tuj.onrender.com
+
 
 ## Features
 - Secure user authentication and signup process.
